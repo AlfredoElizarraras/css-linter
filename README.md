@@ -1,17 +1,9 @@
 
 ---
 
-# Project Name
+# CSS Linter
 
 > This project is completed by Oscar Alfredo Gómez Elizarrarás, in partial requirements of the Microverse cirriculum. 
-
-![Screenshot - 1920 x 1080 ](/assets/screenshot.jpg?raw=true "Screenshot")
-
----
-
-## Live Demo
-
-url of the demo
 
 ---
 
@@ -25,13 +17,9 @@ url of the demo
 
 - Ruby 2.6.5
 
-### Dependencies
-
-If there are dependencies
-
 ### Install
 
-`git clone https://github.com/AlfredoElizarraras/project-name.git`
+`git clone https://github.com/AlfredoElizarraras/css-linter.git`
 
 #### On command line:
 `bundler install`
@@ -50,7 +38,7 @@ If there are dependencies
 
 Contributions, issues and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/AlfredoElizarraras/project-name/issues).
+Feel free to check the [issues page](https://github.com/AlfredoElizarraras/css-linter/issues).
 
 ## Show your support
 
