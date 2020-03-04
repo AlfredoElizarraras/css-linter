@@ -19,6 +19,7 @@ class Linter
     YAML.load_file('checks.yml')['Checks'].each do |k, _v|
       k.each { |key, value| checks.push("check_#{key.to_sym}") if value[0]['Enabled'] }
     end
+    checks
   end
 
   def do_checks

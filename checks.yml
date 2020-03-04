@@ -1,14 +1,16 @@
 --- 
-Checks: 
+Checks:
 - spaces_before_first_brace:
   - Enabled: true
 - spaces_after_first_brace:
   - Enabled: true
-- bem_convention:
-  - Enabled: false
-- smaccs_structure:
-  - Enabled: false
 - indentation_of_rules:
   - Enabled: false
 - spaces_after_colon_in_rules:
+  - Enabled: false
+- closing_braces:
+  - Enabled: false
+- bem_naming_convention:
+  - Enabled: false
+- smaccs_structure:
   - Enabled: false
