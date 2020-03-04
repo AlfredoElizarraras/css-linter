@@ -3,6 +3,7 @@ require_relative 'write_messages'
 require_relative 'error'
 
 class Linter
+  
   include Error
 
   def initialize(css_file)
@@ -12,6 +13,7 @@ class Linter
     @css_file = File.open(css_file, 'r')
     @css_read = @css_file.read
     @css_file.close
+    @errors_count = 0
   end
 
   def fill_checks(rules_file)
@@ -22,36 +24,43 @@ class Linter
   end
 
   def do_checks
-    @checks.each { |method| send(method) }
+    @checks.each { |method| @errors_count += send(method) }
   end
 
   def write_errors
+    puts "Number of errors: #{@errors_count}\n"
     @error_message.write_messages
   end
 
   def check_spaces_before_first_brace
     line_number = 0
     group = 'spaces_before_first_brace'
+    errors_count = 0
     @css_read.each_line do |line|
       line_number += 1
       next unless /{/.match(line)
 
       unless /\s{/.match(line)
         @error_message.save_message(group, "#{ERROR_MISSING_SPACE} #{line_number}\n", ERROR)
+        errors_count += 1
       end
     end
+    errors_count
   end
 
   def check_spaces_after_first_brace
     line_number = 0
     group = 'spaces_after_first_brace'
+    errors_count = 0
     @css_read.each_line do |line|
       line_number += 1
       next unless /{/.match(line)
 
       if /{[\s]+\n/.match(line)
         @error_message.save_message(group, "#{ERROR_EXTRA_SPACE} #{line_number}\n", ERROR)
+        errors_count += 1
       end
     end
+    errors_count
   end
 end
