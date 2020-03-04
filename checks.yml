@@ -3,7 +3,7 @@ Checks:
 - spaces_before_first_brace:
   - Enabled: true
 - spaces_after_first_brace:
-  - Enabled: true
+  - Enabled: false
 - indentation_of_rules:
   - Enabled: false
 - spaces_after_colon_in_rules:
