@@ -1,4 +1,5 @@
 require_relative '../lib/linter'
+require_relative '../lib/error'
 
 RSpec.describe Linter do
   let(:files) { %w[spec/test.css spec/test.yml] }
@@ -13,8 +14,8 @@ RSpec.describe Linter do
     end
   end
   let(:delete_files) { files.each { |file| File.delete(file) if File.exist?(file) } }
-  let(:spaces_before_first_brace_error) { /There's a missing space in line: / }
-  let(:spaces_after_first_brace_error) { /There's an extra space in line: / }
+  let(:spaces_before_first_brace_error) { /#{Error::ERROR_MISSING_SPACE}/ }
+  let(:spaces_after_first_brace_error) { /#{Error::ERROR_EXTRA_SPACE}/ }
 
   describe '#fill_checks' do
     it 'Opens a yaml file, return an array with the rules that will check.' do
