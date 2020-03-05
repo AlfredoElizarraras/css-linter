@@ -6,6 +6,14 @@ require 'ripper'
 require_relative 'write_messages'
 require_relative 'error'
 
+#
+#  Naming of variables:
+#    ln => line number
+#    g => group
+#    ec => error count
+#    aob => after opening brace
+#
+
 class Linter
   include Error
 
@@ -16,7 +24,7 @@ class Linter
     @css_file = File.open(css_file, 'r')
     @css_read = @css_file.read
     @css_file.close
-    @errors_count = 0
+    @ec = 0
   end
 
   def fill_checks(rules_file)
@@ -27,68 +35,90 @@ class Linter
   end
 
   def do_checks
-    @checks.each { |method| @errors_count += send(method) }
+    @checks.each { |method| @ec += send(method) }
   end
 
   def write_errors
-    puts "Number of errors: #{@errors_count}\n"
+    puts "Number of errors: #{@ec}\n\n"
     @error_message.write_messages
   end
 
   def check_spaces_before_first_brace
-    line_number = 0
-    group = 'spaces_before_first_brace'
-    errors_count = 0
+    ln = 0
+    g = 'spaces_before_first_brace'
+    ec = 0
     @css_read.each_line do |line|
-      line_number += 1
+      ln += 1
       next unless /{/.match(line)
 
       unless /\s{/.match(line)
-        @error_message.save_message(group, "#{ERROR_MISSING_SPACE} #{line_number}\n", ERROR)
-        errors_count += 1
+        @error_message.save_message(g, "#{ERROR_MISSING_SPACE} #{ln}\n", ERROR)
+        ec += 1
       end
     end
-    errors_count
+    ec
   end
 
   def check_spaces_after_first_brace
-    line_number = 0
-    group = 'spaces_after_first_brace'
-    errors_count = 0
+    ln = 0
+    g = 'spaces_after_first_brace'
+    ec = 0
     @css_read.each_line do |line|
-      line_number += 1
+      ln += 1
       next unless /{/.match(line)
 
       if /{[\s]+\n/.match(line)
-        @error_message.save_message(group, "#{ERROR_EXTRA_SPACE} #{line_number}\n", ERROR)
-        errors_count += 1
+        @error_message.save_message(g, "#{ERROR_EXTRA_SPACE} #{ln}\n", ERROR)
+        ec += 1
       end
     end
-    errors_count
+    ec
   end
 
   def check_rules_indentation
     ln = 0
     g = 'rules_indentation'
-    errors_count = 0
-    after_opening_brace = false
+    ec = 0
+    aob = false
     save_message = lambda do |s|
       @error_message.save_message(g, "#{ERROR_MISSING_INDENTATION.gsub('spaces', s)} #{ln}\n", ERROR)
     end
     @css_read.each_line do |line|
       ln += 1
-      after_opening_brace = true if /{/.match(line)
+      aob = true if /{/.match(line)
       next if /{/.match(line)
 
-      after_opening_brace = false if /}/.match(line)
+      aob = false if /}/.match(line)
       next if /}/.match(line)
 
-      words = Ripper.tokenize(line) if after_opening_brace
-      errors_count += 1 if after_opening_brace && (words[0] != "\s\s" || words[0] == "\s")
-      save_message.call('1 space') if after_opening_brace && words[0] == "\s" && words[0] != "\s\s"
-      save_message.call('2 spaces') if after_opening_brace && words[0] != "\s\s" && words[0] != "\s"
+      words = Ripper.tokenize(line) if aob
+      ec += 1 if aob && (words[0] != "\s\s" || words[0] == "\s")
+      save_message.call('1 space') if aob && words[0] == "\s" && words[0] != "\s\s"
+      save_message.call('2 spaces') if aob && words[0] != "\s\s" && words[0] != "\s"
     end
-    errors_count
+    ec
+  end
+
+  def check_space_after_colon
+    ln = 0
+    g = 'space_after_colon'
+    ec = 0
+    aob = false
+    save_message = lambda do
+      @error_message.save_message(g, "#{ERROR_MISSING_SPACE_AFTER_COLON} #{ln}\n", ERROR)
+    end
+    @css_read.each_line do |line|
+      ln += 1
+      aob = true if /{/.match(line)
+      next if /{/.match(line)
+
+      aob = false if /}/.match(line)
+      next if /}/.match(line)
+
+      ec += 1 if aob && /:[^\s]/.match(line)
+      save_message.call if aob && /:[^\s]/.match(line)
+    end
+    ec
   end
 end
 

@@ -18,6 +18,7 @@ RSpec.describe Linter do
   let(:spaces_after_first_brace_error) { /#{Error::ERROR_EXTRA_SPACE}/ }
   let(:rules_indentation_1_spaces_error) { /#{Error::ERROR_MISSING_INDENTATION.gsub('spaces', '1 space')}/ }
   let(:rules_indentation_2_spaces_error) { /#{Error::ERROR_MISSING_INDENTATION.gsub('spaces', '2 spaces')}/ }
+  let(:space_after_color_error) { /#{Error::ERROR_MISSING_SPACE_AFTER_COLON}/ }
 
   describe '#fill_checks' do
     it 'Opens a yaml file, return an array with the rules that will check.' do
@@ -100,7 +101,7 @@ RSpec.describe Linter do
         linter.check_spaces_after_first_brace
         expect do
           linter.write_errors
-        end.to output("Number of errors: 0\n").to_stdout
+        end.to output("Number of errors: 0\n\n").to_stdout
         delete_files
       end
     end
@@ -167,11 +168,11 @@ RSpec.describe Linter do
   describe '#check_rules_indentation' do
     context 'When found a rule not indented (2 or 1 space).' do
       before do
-        css_sample.gsub! "\n  margin: 0;", "\nmargin:0;"
+        css_sample.gsub! "\n  margin: 0;", "\nmargin: 0;"
       end
 
       after do
-        css_sample.gsub! "\nmargin:0;", "\n  margin: 0;"
+        css_sample.gsub! "\nmargin: 0;", "\n  margin: 0;"
       end
       it 'Return the count of the times it founds a rule that aren\'t indented' do
         write_css_file
@@ -183,14 +184,14 @@ RSpec.describe Linter do
 
     context 'When found a rule not indented with 1 spaces' do
       before do
-        css_sample.gsub! "\n  margin: 0;", "\n margin:0;"
+        css_sample.gsub! "\n  margin: 0;", "\n margin: 0;"
       end
 
       after do
-        css_sample.gsub! "\n margin:0;", "\n  margin: 0;"
+        css_sample.gsub! "\n margin: 0;", "\n  margin: 0;"
       end
 
-      it 'Saves the message that there is missing 1 spaces of indentation (it is show when call write_errors).' do
+      it 'Saves the message that there is missing 1 space of indentation (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
         linter.check_rules_indentation
@@ -217,6 +218,34 @@ RSpec.describe Linter do
         expect do
           linter.write_errors
         end.to output(rules_indentation_2_spaces_error).to_stdout
+        delete_files
+      end
+    end
+  end
+
+  describe '#check_space_after_colon' do
+    context 'When found a rule that don\'t have a space after colon' do
+      before do
+        css_sample.gsub! "\n  margin: 0;", "\n  margin:0;"
+      end
+
+      after do
+        css_sample.gsub! "\n  margin:0;", "\n  margin: 0;"
+      end
+      it 'Return the count of the times it founds a rule that aren\'t indented' do
+        write_css_file
+        linter = Linter.new(files[0])
+        expect(linter.check_space_after_colon).to eql(1)
+        delete_files
+      end
+
+      it 'Saves the message that there is missing a space of indentation (it is show when call write_errors).' do
+        write_css_file
+        linter = Linter.new(files[0])
+        linter.check_space_after_colon
+        expect do
+          linter.write_errors
+        end.to output(space_after_color_error).to_stdout
         delete_files
       end
     end

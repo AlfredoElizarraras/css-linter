@@ -6,10 +6,8 @@ Checks:
   - Enabled: true
 - rules_indentation:
   - Enabled: true
-- spaces_after_colon_in_rules:
-  - Enabled: false
-- closing_braces:
-  - Enabled: false
+- space_after_colon:
+  - Enabled: true
 - bem_naming_convention:
   - Enabled: false
 - smaccs_structure:
