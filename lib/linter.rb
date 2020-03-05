@@ -1,9 +1,9 @@
 require 'yaml'
+require 'ripper'
 require_relative 'write_messages'
 require_relative 'error'
 
 class Linter
-  
   include Error
 
   def initialize(css_file)
@@ -60,6 +60,27 @@ class Linter
         @error_message.save_message(group, "#{ERROR_EXTRA_SPACE} #{line_number}\n", ERROR)
         errors_count += 1
       end
+    end
+    errors_count
+  end
+
+  def check_rules_indentation
+    ln = 0
+    g = 'rules_indentation'
+    errors_count = 0
+    after_opening_brace = false
+    @css_read.each_line do |line|
+      ln += 1
+      after_opening_brace = true if /{/.match(line)
+      next if /{/.match(line)
+
+      after_opening_brace = false if /}/.match(line)
+      next if /}/.match(line)
+
+      words = Ripper.tokenize(line) if after_opening_brace
+      @error_message.save_message(g, "#{ERROR_MISSING_INDENTATION.gsub('spaces', '2 spaces')} #{ln}\n", ERROR) if after_opening_brace && words[0] != "\s\s"
+      # @error_message.save_message(g, "#{ERROR_MISSING_INDENTATION.gsub('spaces', '1 spaces')} #{ln}\n", ERROR) if after_opening_brace && words[0] == "\s"
+      errors_count += 1 if after_opening_brace && (words[0] != "\s\s" || words[0] == "\s")
     end
     errors_count
   end

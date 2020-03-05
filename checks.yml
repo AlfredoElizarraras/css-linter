@@ -4,8 +4,8 @@ Checks:
   - Enabled: true
 - spaces_after_first_brace:
   - Enabled: true
-- indentation_of_rules:
-  - Enabled: false
+- rules_indentation:
+  - Enabled: true
 - spaces_after_colon_in_rules:
   - Enabled: false
 - closing_braces:

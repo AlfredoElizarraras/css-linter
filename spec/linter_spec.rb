@@ -82,7 +82,6 @@ RSpec.describe Linter do
 
       it 'Write messages in console.' do
         write_css_file
-        write_yaml_file
         linter = Linter.new(files[0])
         linter.check_spaces_before_first_brace
         expect do
@@ -95,7 +94,6 @@ RSpec.describe Linter do
     context 'When errors aren\'t founded' do
       it 'Write Number of errors: 0.' do
         write_css_file
-        write_yaml_file
         linter = Linter.new(files[0])
         linter.check_spaces_after_first_brace
         expect do
@@ -118,7 +116,6 @@ RSpec.describe Linter do
 
       it 'Return the count of the times it found that ther\'s missing a space before opening brace.' do
         write_css_file
-        write_yaml_file
         linter = Linter.new(files[0])
         expect(linter.check_spaces_before_first_brace).to eql(1)
         delete_files
@@ -126,7 +123,6 @@ RSpec.describe Linter do
 
       it 'Saves the message that there is a missing space (it is show when call write_errors).' do
         write_css_file
-        write_yaml_file
         linter = Linter.new(files[0])
         linter.check_spaces_before_first_brace
         expect do
@@ -149,7 +145,6 @@ RSpec.describe Linter do
 
       it 'Return the count of the times it found the a space after a opening brace.' do
         write_css_file
-        write_yaml_file
         linter = Linter.new(files[0])
         expect(linter.check_spaces_after_first_brace).to eql(1)
         delete_files
@@ -157,12 +152,29 @@ RSpec.describe Linter do
 
       it 'Saves the message that there is an extra space (it is show when call write_errors).' do
         write_css_file
-        write_yaml_file
         linter = Linter.new(files[0])
         linter.check_spaces_after_first_brace
         expect do
           linter.write_errors
         end.to output(spaces_after_first_brace_error).to_stdout
+        delete_files
+      end
+    end
+  end
+
+  describe '#check_rules_indentation' do
+    context 'When found a rule not indented.' do
+      before do
+        css_sample.gsub! "\n  margin: 0;", "\nmargin:0;"
+      end
+
+      after do
+        css_sample.gsub! "\nmargin:0;", "\n  margin: 0;"
+      end
+      it 'Return the count of the times it founds a rule that aren\'t indented' do
+        write_css_file
+        linter = Linter.new(files[0])
+        expect(linter.check_rules_indentation).to eql(1)
         delete_files
       end
     end
