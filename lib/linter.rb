@@ -120,6 +120,22 @@ class Linter
     end
     ec
   end
+
+  def check_no_uppcase_selectors
+    ln = 0
+    g = 'check_no_uppcase_selectors'
+    ec = 0
+    @css_read.each_line do |line|
+      ln += 1
+      next unless /{/.match(line)
+
+      if /[A-Z]/.match(line)
+        @error_message.save_message(g, "#{WARNING_NO_UPPCASE_SELECTORS} #{ln}\n", WARNING)
+        ec += 1
+      end
+    end
+    ec
+  end
 end
 
 # rubocop: enable Metrics/PerceivedComplexity

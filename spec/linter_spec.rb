@@ -19,6 +19,7 @@ RSpec.describe Linter do
   let(:rules_indentation_1_spaces_error) { /#{Error::ERROR_MISSING_INDENTATION.gsub('spaces', '1 space')}/ }
   let(:rules_indentation_2_spaces_error) { /#{Error::ERROR_MISSING_INDENTATION.gsub('spaces', '2 spaces')}/ }
   let(:space_after_color_error) { /#{Error::ERROR_MISSING_SPACE_AFTER_COLON}/ }
+  let(:no_uppcase_selectors_warning) { /#{Error::WARNING_NO_UPPCASE_SELECTORS}/ }
 
   describe '#fill_checks' do
     it 'Opens a yaml file, return an array with the rules that will check.' do
@@ -246,6 +247,34 @@ RSpec.describe Linter do
         expect do
           linter.write_errors
         end.to output(space_after_color_error).to_stdout
+        delete_files
+      end
+    end
+  end
+
+  describe '#check_no_uppcase_selectors' do
+    context 'When found a selector that contain a uppercase.' do
+      before do
+        css_sample.gsub! '* {', '.Navbar {'
+      end
+
+      after do
+        css_sample.gsub! '.Navbar {', '* {'
+      end
+      it 'Return the count of the times it founds a selector that contain a upper-case.' do
+        write_css_file
+        linter = Linter.new(files[0])
+        expect(linter.check_no_uppcase_selectors).to eql(1)
+        delete_files
+      end
+
+      it 'Saves the message that there is a upper-case in the selector (it is show when call write_errors).' do
+        write_css_file
+        linter = Linter.new(files[0])
+        linter.check_no_uppcase_selectors
+        expect do
+          linter.write_errors
+        end.to output(no_uppcase_selectors_warning).to_stdout
         delete_files
       end
     end

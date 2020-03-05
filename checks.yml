@@ -8,7 +8,5 @@ Checks:
   - Enabled: true
 - space_after_colon:
   - Enabled: true
-- bem_naming_convention:
-  - Enabled: false
-- smaccs_structure:
-  - Enabled: false
+- no_uppcase_selectors:
+  - Enabled: true
