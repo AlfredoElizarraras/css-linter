@@ -123,7 +123,7 @@ class Linter
 
   def check_no_uppcase_selectors
     ln = 0
-    g = 'check_no_uppcase_selectors'
+    g = 'no_uppcase_selectors'
     ec = 0
     @css_read.each_line do |line|
       ln += 1

@@ -67,9 +67,81 @@
     Messages from space_after_colon:
       - There's missing a space after colon at line:  7
 
-    Messages from check_no_uppcase_selectors:
+    Messages from no_uppcase_selectors:
       - Detected uses of upper-case in selector at line:  6
 
+  ```
+
+4. Examples of good and bad code for each check.
+  - spaces_before_first_brace:
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code:
+    .nav{
+      margin: 0;
+      padding: 0;
+    }
+  ```
+  - spaces_after_first_brace
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .nav { 
+      margin: 0;
+      padding: 0;
+    }
+  ```
+  - rules_indentation
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .nav { 
+    margin: 0; /* left 2 spaces of indentation */
+     padding: 0; /* left 1 spaces of indentation */
+    }
+  ```
+  - space_after_colon
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .nav { 
+      margin:0; 
+      padding:0; 
+    }
+  ```
+  - no_uppcase_selectors
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .Nav { 
+      margin: 0; 
+      padding: 0; 
+    }
   ```
 
 
