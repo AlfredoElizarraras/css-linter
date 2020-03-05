@@ -1,3 +1,6 @@
+# rubocop: disable Metrics/PerceivedComplexity
+# rubocop: disable Metrics/CyclomaticComplexity
+
 require 'yaml'
 require 'ripper'
 require_relative 'write_messages'
@@ -69,6 +72,9 @@ class Linter
     g = 'rules_indentation'
     errors_count = 0
     after_opening_brace = false
+    save_message = lambda do |s|
+      @error_message.save_message(g, "#{ERROR_MISSING_INDENTATION.gsub('spaces', s)} #{ln}\n", ERROR)
+    end
     @css_read.each_line do |line|
       ln += 1
       after_opening_brace = true if /{/.match(line)
@@ -78,10 +84,13 @@ class Linter
       next if /}/.match(line)
 
       words = Ripper.tokenize(line) if after_opening_brace
-      @error_message.save_message(g, "#{ERROR_MISSING_INDENTATION.gsub('spaces', '2 spaces')} #{ln}\n", ERROR) if after_opening_brace && words[0] != "\s\s"
-      # @error_message.save_message(g, "#{ERROR_MISSING_INDENTATION.gsub('spaces', '1 spaces')} #{ln}\n", ERROR) if after_opening_brace && words[0] == "\s"
       errors_count += 1 if after_opening_brace && (words[0] != "\s\s" || words[0] == "\s")
+      save_message.call('1 space') if after_opening_brace && words[0] == "\s" && words[0] != "\s\s"
+      save_message.call('2 spaces') if after_opening_brace && words[0] != "\s\s" && words[0] != "\s"
     end
     errors_count
   end
 end
+
+# rubocop: enable Metrics/PerceivedComplexity
+# rubocop: enable Metrics/CyclomaticComplexity

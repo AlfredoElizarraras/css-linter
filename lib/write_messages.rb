@@ -1,4 +1,4 @@
-# rubocop: disable Metrics/PerceivedComplexity:
+# rubocop: disable Metrics/PerceivedComplexity
 # rubocop: disable Metrics/CyclomaticComplexity
 require 'colorize'
 
@@ -27,5 +27,5 @@ class WriteMessage
   end
 end
 
-# rubocop: enable Metrics/PerceivedComplexity:
+# rubocop: enable Metrics/PerceivedComplexity
 # rubocop: enable Metrics/CyclomaticComplexity

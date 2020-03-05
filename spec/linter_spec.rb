@@ -16,6 +16,8 @@ RSpec.describe Linter do
   let(:delete_files) { files.each { |file| File.delete(file) if File.exist?(file) } }
   let(:spaces_before_first_brace_error) { /#{Error::ERROR_MISSING_SPACE}/ }
   let(:spaces_after_first_brace_error) { /#{Error::ERROR_EXTRA_SPACE}/ }
+  let(:rules_indentation_1_spaces_error) { /#{Error::ERROR_MISSING_INDENTATION.gsub('spaces', '1 space')}/ }
+  let(:rules_indentation_2_spaces_error) { /#{Error::ERROR_MISSING_INDENTATION.gsub('spaces', '2 spaces')}/ }
 
   describe '#fill_checks' do
     it 'Opens a yaml file, return an array with the rules that will check.' do
@@ -163,7 +165,7 @@ RSpec.describe Linter do
   end
 
   describe '#check_rules_indentation' do
-    context 'When found a rule not indented.' do
+    context 'When found a rule not indented (2 or 1 space).' do
       before do
         css_sample.gsub! "\n  margin: 0;", "\nmargin:0;"
       end
@@ -175,6 +177,46 @@ RSpec.describe Linter do
         write_css_file
         linter = Linter.new(files[0])
         expect(linter.check_rules_indentation).to eql(1)
+        delete_files
+      end
+    end
+
+    context 'When found a rule not indented with 1 spaces' do
+      before do
+        css_sample.gsub! "\n  margin: 0;", "\n margin:0;"
+      end
+
+      after do
+        css_sample.gsub! "\n margin:0;", "\n  margin: 0;"
+      end
+
+      it 'Saves the message that there is missing 1 spaces of indentation (it is show when call write_errors).' do
+        write_css_file
+        linter = Linter.new(files[0])
+        linter.check_rules_indentation
+        expect do
+          linter.write_errors
+        end.to output(rules_indentation_1_spaces_error).to_stdout
+        delete_files
+      end
+    end
+
+    context 'When found a rule not indented with 2 spaces' do
+      before do
+        css_sample.gsub! "\n  margin: 0;", "\nmargin:0;"
+      end
+
+      after do
+        css_sample.gsub! "\nmargin:0;", "\n  margin: 0;"
+      end
+
+      it 'Saves the message that there is missing 2 spaces of indentation (it is show when call write_errors).' do
+        write_css_file
+        linter = Linter.new(files[0])
+        linter.check_rules_indentation
+        expect do
+          linter.write_errors
+        end.to output(rules_indentation_2_spaces_error).to_stdout
         delete_files
       end
     end
