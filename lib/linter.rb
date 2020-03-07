@@ -43,6 +43,8 @@ class Linter
     @error_message.write_messages
   end
 
+  private
+
   def check_spaces_before_first_brace
     ln = 0
     g = 'spaces_before_first_brace'

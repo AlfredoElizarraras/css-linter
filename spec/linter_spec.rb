@@ -87,7 +87,7 @@ RSpec.describe Linter do
       it 'Write messages in console.' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_spaces_before_first_brace
+        linter.send(:check_spaces_before_first_brace)
         expect do
           linter.write_errors
         end.to output(spaces_before_first_brace_error).to_stdout
@@ -99,7 +99,7 @@ RSpec.describe Linter do
       it 'Write Number of errors: 0.' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_spaces_after_first_brace
+        linter.send(:check_spaces_after_first_brace)
         expect do
           linter.write_errors
         end.to output("Number of errors: 0\n\n").to_stdout
@@ -121,14 +121,14 @@ RSpec.describe Linter do
       it 'Return the count of the times it found that ther\'s missing a space before opening brace.' do
         write_css_file
         linter = Linter.new(files[0])
-        expect(linter.check_spaces_before_first_brace).to eql(1)
+        expect(linter.send(:check_spaces_before_first_brace)).to eql(1)
         delete_files
       end
 
       it 'Saves the message that there is a missing space (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_spaces_before_first_brace
+        linter.send(:check_spaces_before_first_brace)
         expect do
           linter.write_errors
         end.to output(spaces_before_first_brace_error).to_stdout
@@ -150,14 +150,14 @@ RSpec.describe Linter do
       it 'Return the count of the times it found the a space after a opening brace.' do
         write_css_file
         linter = Linter.new(files[0])
-        expect(linter.check_spaces_after_first_brace).to eql(1)
+        expect(linter.send(:check_spaces_after_first_brace)).to eql(1)
         delete_files
       end
 
       it 'Saves the message that there is an extra space (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_spaces_after_first_brace
+        linter.send(:check_spaces_after_first_brace)
         expect do
           linter.write_errors
         end.to output(spaces_after_first_brace_error).to_stdout
@@ -178,7 +178,7 @@ RSpec.describe Linter do
       it 'Return the count of the times it founds a rule that aren\'t indented' do
         write_css_file
         linter = Linter.new(files[0])
-        expect(linter.check_rules_indentation).to eql(1)
+        expect(linter.send(:check_rules_indentation)).to eql(1)
         delete_files
       end
     end
@@ -195,7 +195,7 @@ RSpec.describe Linter do
       it 'Saves the message that there is missing 1 space of indentation (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_rules_indentation
+        linter.send(:check_rules_indentation)
         expect do
           linter.write_errors
         end.to output(rules_indentation_1_spaces_error).to_stdout
@@ -215,7 +215,7 @@ RSpec.describe Linter do
       it 'Saves the message that there is missing 2 spaces of indentation (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_rules_indentation
+        linter.send(:check_rules_indentation)
         expect do
           linter.write_errors
         end.to output(rules_indentation_2_spaces_error).to_stdout
@@ -236,14 +236,14 @@ RSpec.describe Linter do
       it 'Return the count of the times it founds a rule that aren\'t indented' do
         write_css_file
         linter = Linter.new(files[0])
-        expect(linter.check_space_after_colon).to eql(1)
+        expect(linter.send(:check_space_after_colon)).to eql(1)
         delete_files
       end
 
       it 'Saves the message that there is missing a space of indentation (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_space_after_colon
+        linter.send(:check_space_after_colon)
         expect do
           linter.write_errors
         end.to output(space_after_color_error).to_stdout
@@ -264,14 +264,14 @@ RSpec.describe Linter do
       it 'Return the count of the times it founds a selector that contain a upper-case.' do
         write_css_file
         linter = Linter.new(files[0])
-        expect(linter.check_no_uppcase_selectors).to eql(1)
+        expect(linter.send(:check_no_uppcase_selectors)).to eql(1)
         delete_files
       end
 
       it 'Saves the message that there is a upper-case in the selector (it is show when call write_errors).' do
         write_css_file
         linter = Linter.new(files[0])
-        linter.check_no_uppcase_selectors
+        linter.send(:check_no_uppcase_selectors)
         expect do
           linter.write_errors
         end.to output(no_uppcase_selectors_warning).to_stdout
