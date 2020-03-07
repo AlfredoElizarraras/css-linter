@@ -24,6 +24,127 @@
 #### On command line:
 `bundler install`
 
+### Use
+
+1. Before running the linter, it needs a yaml file in the root directory, named checks.yml with the property 'Enabled: true' in the checks we want to perform.
+ - Example of checks:
+ ```
+  --- 
+  Checks:
+  - spaces_before_first_brace:
+    - Enabled: true
+  - spaces_after_first_brace:
+    - Enabled: true
+  - rules_indentation:
+    - Enabled: true
+  - space_after_colon:
+    - Enabled: false
+  - no_uppcase_selectors:
+    - Enabled: false
+ ```
+2. Then we call the linter adding the path of the file we want to check.
+  - For example:
+  ```
+  ruby bin/main.rb examples/styles.css
+  ```
+3. We will get the feedback from the linter with the total and details of errors and/or warnings we want to change.
+  - Example of output:
+  ```
+    Number of errors: 8
+
+    Messages from spaces_before_first_brace:
+      - There's a missing space at line:  1
+      - There's a missing space at line:  6
+
+    Messages from spaces_after_first_brace:
+      - There's an extra space at line:  6
+
+    Messages from rules_indentation:
+      - Theres's missing indentation of 1 space at line:  2
+      - Theres's missing indentation of 1 space at line:  3
+      - Theres's missing indentation of 2 spaces at line:  7
+
+    Messages from space_after_colon:
+      - There's missing a space after colon at line:  7
+
+    Messages from no_uppcase_selectors:
+      - Detected uses of upper-case in selector at line:  6
+
+  ```
+
+4. Examples of good and bad code for each check.
+  - spaces_before_first_brace:
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code:
+    .nav{
+      margin: 0;
+      padding: 0;
+    }
+  ```
+  - spaces_after_first_brace
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .nav { 
+      margin: 0;
+      padding: 0;
+    }
+  ```
+  - rules_indentation
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .nav { 
+    margin: 0; /* left 2 spaces of indentation */
+     padding: 0; /* left 1 spaces of indentation */
+    }
+  ```
+  - space_after_colon
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .nav { 
+      margin:0; 
+      padding:0; 
+    }
+  ```
+  - no_uppcase_selectors
+  ```
+    Good code:
+    .nav {
+      margin: 0;
+      padding: 0;
+    }
+
+    Bad code: (it is a space after the openning brace)
+    .Nav { 
+      margin: 0; 
+      padding: 0; 
+    }
+  ```
+
+
 ## Authors
 
 👤 **Oscar Alfredo Gómez Elizarrarás**
@@ -47,13 +168,12 @@ Give a ⭐️ if you like this project!
 ## Acknowledgments
 
 - [Microverse](https://microverse.org)
-- [Odin project](https://www.theodinproject.com/)
 
 ---
 
 ## 📝 License
 
-This project is [MIT](lic.url) licensed.
+This project is [MIT](https://github.com/AlfredoElizarraras/css-linter/blob/develop/LICENSE) licensed.
 
 Copyright 2019 Oscar Alfredo Gómez Elizarrarás
 

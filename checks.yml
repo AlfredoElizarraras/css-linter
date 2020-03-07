@@ -1,0 +1,12 @@
+--- 
+Checks:
+- spaces_before_first_brace:
+  - Enabled: true
+- spaces_after_first_brace:
+  - Enabled: true
+- rules_indentation:
+  - Enabled: true
+- space_after_colon:
+  - Enabled: true
+- no_uppcase_selectors:
+  - Enabled: true
