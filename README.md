@@ -1,30 +1,40 @@
+<h1 align="center">
+  CSS Linter
+</h1>
 
----
 
-# CSS Linter
+## Table of Contents
 
-> This project is completed by Oscar Alfredo Gómez Elizarrarás, in partial requirements of the Microverse cirriculum. 
+* [About the Project](#about-the-project)
+* [Built With](#built-with)
+* [Prerequisites](#prerequisites)
+* [Install](#install)
+* [Use](#use)
+* [Authors](#authors)
+* [Contributing](#contributing)
+* [Acknowledgments](#acknowledgments)
+* [License](#license)
+ 
+## About the project
 
----
+> This is a css linter built with ruby, it allows the programmer avoid some bad writing programming style. 
 
 ## Built With
 
 - Ruby 2.6.5
 
----
-
 ### Prerequisites
 
 - Ruby 2.6.5
 
-### Install
+## Install
 
 `git clone https://github.com/AlfredoElizarraras/css-linter.git`
 
-#### On command line:
+> On command line:
 `bundler install`
 
-### Use
+## Use
 
 1. Before running the linter, it needs a yaml file in the root directory, named checks.yml with the property 'Enabled: true' in the checks we want to perform.
  - Example of checks:
@@ -147,6 +157,8 @@
 
 ## Authors
 
+> This project is completed by Oscar Alfredo Gómez Elizarrarás, in partial requirements of the Microverse cirriculum.
+
 👤 **Oscar Alfredo Gómez Elizarrarás**
 
 - Github: [@AlfredoElizarraras](https://github.com/AlfredoElizarraras)
@@ -155,7 +167,7 @@
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues and feature requests are welcome!
 
@@ -171,7 +183,7 @@ Give a ⭐️ if you like this project!
 
 ---
 
-## 📝 License
+## License
 
 This project is [MIT](https://github.com/AlfredoElizarraras/css-linter/blob/develop/LICENSE) licensed.
 
